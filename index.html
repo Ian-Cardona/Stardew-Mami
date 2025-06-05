@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Congratulations Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(to bottom, #87CEEB, #98FB98);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        #gameContainer {
+            width: 90vw;
+            max-width: 800px;
+            height: 90vh;
+            max-height: 600px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%2398FB98" width="100" height="100"/><circle fill="%2390EE90" cx="20" cy="20" r="2"/><circle fill="%2390EE90" cx="80" cy="30" r="1.5"/><circle fill="%2390EE90" cx="60" cy="70" r="2"/><circle fill="%2390EE90" cx="30" cy="80" r="1"/></svg>');
+            border: 4px solid #8B4513;
+            border-radius: 12px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        }
+
+        #nurseCharacter {
+            position: absolute;
+            left: 5%;
+            top: 30%;
+            width: 80px;
+            height: 120px;
+            background-image: url('./assets/images/nurse-character.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            border: 2px solid #FF69B4;
+            border-radius: 8px;
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* Fallback if image doesn't load */
+        #nurseCharacter:empty::before {
+            content: '👩‍⚕️';
+            font-size: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        #boyfriendCharacter {
+            position: absolute;
+            right: 5%;
+            top: 30%;
+            width: 80px;
+            height: 120px;
+            background-image: url('./assets/images/boyfriend-character.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            border: 2px solid #4169E1;
+            border-radius: 8px;
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+
+        /* Fallback if image doesn't load */
+        #boyfriendCharacter:empty::before {
+            content: '👨‍💻';
+            font-size: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        #boyfriendCharacter.talking {
+            transform: scale(1.1);
+        }
+
+        #farmArea {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            margin: 20px;
+        }
+
+        .dirtPatch {
+            width: 80px;
+            height: 80px;
+            background-image: url('./assets/images/dirt-patch.png');
+            background-size: cover;
+            background-position: center;
+            border: 3px solid #654321;
+            border-radius: 8px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* Fallback if image doesn't load */
+        .dirtPatch:not([style*="background-image"]) {
+            background: #8B4513;
+        }
+
+        .dirtPatch:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .dirtPatch.planted {
+            background: #8B4513;
+            cursor: not-allowed;
+        }
+
+        .seed {
+            width: 30px;
+            height: 30px;
+            background-image: url('./assets/images/planted-seed.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.5s ease;
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* Fallback if image doesn't load */
+        .seed:not([style*="background-image"]) {
+            background: #F4A460;
+            border-radius: 50%;
+        }
+
+        .seed.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .plant {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 48px;
+            font-weight: bold;
+            color: #228B22;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            opacity: 0;
+            transform: translateX(-50%) translateY(20px) scale(0);
+            transition: all 1s ease;
+        }
+
+        .plant.grow {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0) scale(1);
+        }
+
+        #instructions {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.9);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #333;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        #celebration {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,215,0,0.1);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #FF6347;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            animation: celebration 2s ease-in-out;
+        }
+
+        @keyframes celebration {
+            0%, 100% { background: rgba(255,215,0,0.1); }
+            50% { background: rgba(255,215,0,0.3); }
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #FFD700;
+            border-radius: 50%;
+            animation: confetti 3s ease-out forwards;
+        }
+
+        @keyframes confetti {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(500px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        #loadingScreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 18px;
+            z-index: 1000;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #dialogBox {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 600px;
+            background: #FFFFFF;
+            border: 4px solid #000000;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            display: none;
+            z-index: 100;
+        }
+
+        #dialogContent {
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            color: #000000;
+            line-height: 1.4;
+            min-height: 60px;
+            position: relative;
+        }
+
+        #speakerName {
+            font-weight: bold;
+            color: #4169E1;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        #dialogText {
+            margin-bottom: 10px;
+        }
+
+        #continuePrompt {
+            position: absolute;
+            bottom: 5px;
+            right: 10px;
+            font-size: 12px;
+            color: #666;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .dialog-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.3);
+            display: none;
+            z-index: 50;
+        }
+            #gameContainer {
+                width: 95vw;
+                height: 95vh;
+            }
+            
+            .dirtPatch {
+                width: 60px;
+                height: 60px;
+            }
+            
+            #character {
+                width: 60px;
+                height: 90px;
+            }
+            
+            #character::before {
+                font-size: 30px;
+            }
+            
+            .plant {
+                font-size: 36px;
+            }
+            
+            #farmArea {
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <div id="loadingScreen">
+            <div class="spinner"></div>
+            <div>Loading your congratulations...</div>
+        </div>
+        
+        <div id="instructions">Click on the dirt patches to plant seeds!</div>
+        
+        <div class="dialog-overlay" id="dialogOverlay"></div>
+        
+        <div id="nurseCharacter"></div>
+        <div id="boyfriendCharacter"></div>
+        
+        <div id="farmArea">
+            <div class="dirtPatch" data-letter="C">
+                <div class="seed"></div>
+                <div class="plant">C</div>
+            </div>
+            <div class="dirtPatch" data-letter="O">
+                <div class="seed"></div>
+                <div class="plant">O</div>
+            </div>
+            <div class="dirtPatch" data-letter="N">
+                <div class="seed"></div>
+                <div class="plant">N</div>
+            </div>
+            <div class="dirtPatch" data-letter="G">
+                <div class="seed"></div>
+                <div class="plant">G</div>
+            </div>
+            <div class="dirtPatch" data-letter="R">
+                <div class="seed"></div>
+                <div class="plant">R</div>
+            </div>
+        </div>
+        
+        <div id="celebration">
+            🎉 CONGRATULATIONS! 🎉
+        </div>
+
+        <div id="dialogBox">
+            <div id="speakerName">Your Boyfriend</div>
+            <div id="dialogContent">
+                <div id="dialogText"></div>
+                <div id="continuePrompt">▼ Click to continue</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class CongratulationsGame {
+            constructor() {
+                this.plantsPlanted = 0;
+                this.totalPlants = 5;
+                this.isComplete = false;
+                this.isDialogActive = false;
+                this.dirtPatches = document.querySelectorAll('.dirtPatch');
+                this.celebrationDiv = document.getElementById('celebration');
+                this.instructionsDiv = document.getElementById('instructions');
+                this.dialogBox = document.getElementById('dialogBox');
+                this.dialogOverlay = document.getElementById('dialogOverlay');
+                this.dialogText = document.getElementById('dialogText');
+                this.boyfriendCharacter = document.getElementById('boyfriendCharacter');
+                this.continuePrompt = document.getElementById('continuePrompt');
+                
+                // Messages for each plant
+                this.messages = [
+                    "Hey beautiful! 🌱 Look at you starting our little garden! Each seed you plant represents something special about you.",
+                    "That's two down! 💚 You know, watching you work reminds me why I fell for you. Your dedication is incredible!",
+                    "Three seeds planted! 🌿 Just like how you've planted yourself in my heart and made everything grow better.",
+                    "Four! 🌸 You're almost there, love. Every step you take makes me prouder to be yours.",
+                    "Perfect! 🌺 All five planted! Now watch as something amazing grows... just like our love has!"
+                ];
+                
+                this.init();
+            }
+
+            init() {
+                // Simulate loading
+                setTimeout(() => {
+                    document.getElementById('loadingScreen').style.display = 'none';
+                    this.setupEventListeners();
+                }, 1500);
+            }
+
+            setupEventListeners() {
+                this.dirtPatches.forEach(patch => {
+                    patch.addEventListener('click', (e) => this.plantSeed(e));
+                });
+
+                // Dialog click to continue
+                this.dialogBox.addEventListener('click', () => this.closeDialog());
+                this.dialogOverlay.addEventListener('click', () => this.closeDialog());
+            }
+
+            plantSeed(event) {
+                const patch = event.currentTarget;
+                
+                if (patch.classList.contains('planted') || this.isComplete || this.isDialogActive) {
+                    return;
+                }
+
+                // Plant the seed
+                patch.classList.add('planted');
+                const seed = patch.querySelector('.seed');
+                seed.classList.add('show');
+                
+                // Play planting sound
+                this.playSound('plant');
+                
+                this.plantsPlanted++;
+                
+                // Show boyfriend dialog
+                this.showDialog();
+                
+                // Update instructions
+                this.updateInstructions();
+            }
+
+            showDialog() {
+                this.isDialogActive = true;
+                const message = this.messages[this.plantsPlanted - 1];
+                
+                // Show boyfriend talking animation
+                this.boyfriendCharacter.classList.add('talking');
+                
+                // Show dialog box
+                this.dialogOverlay.style.display = 'block';
+                this.dialogBox.style.display = 'block';
+                
+                // Type writer effect
+                this.typeMessage(message);
+            }
+
+            typeMessage(message) {
+                this.dialogText.textContent = '';
+                this.continuePrompt.style.display = 'none';
+                
+                let i = 0;
+                const typeInterval = setInterval(() => {
+                    if (i < message.length) {
+                        this.dialogText.textContent += message.charAt(i);
+                        i++;
+                        
+                        // Play typing sound occasionally
+                        if (i % 3 === 0) {
+                            this.playTypingSound();
+                        }
+                    } else {
+                        clearInterval(typeInterval);
+                        this.continuePrompt.style.display = 'block';
+                    }
+                }, 50); // Adjust speed here (lower = faster)
+            }
+
+            closeDialog() {
+                if (!this.continuePrompt.style.display || this.continuePrompt.style.display === 'none') {
+                    return; // Don't close if message isn't fully typed
+                }
+
+                this.isDialogActive = false;
+                this.dialogBox.style.display = 'none';
+                this.dialogOverlay.style.display = 'none';
+                this.boyfriendCharacter.classList.remove('talking');
+                
+                // Check if all plants are planted
+                if (this.plantsPlanted === this.totalPlants) {
+                    setTimeout(() => this.growPlants(), 500);
+                }
+            }
+
+            growPlants() {
+                // Hide instructions
+                this.instructionsDiv.style.display = 'none';
+                
+                // Grow all plants with staggered timing
+                this.dirtPatches.forEach((patch, index) => {
+                    setTimeout(() => {
+                        const plant = patch.querySelector('.plant');
+                        plant.classList.add('grow');
+                    }, index * 200);
+                });
+                
+                // Show celebration after all plants have grown
+                setTimeout(() => {
+                    this.celebrate();
+                }, (this.totalPlants * 200) + 1000);
+            }
+
+            celebrate() {
+                this.isComplete = true;
+                this.celebrationDiv.style.display = 'flex';
+                this.playSound('celebration');
+                this.createConfetti();
+            }
+
+            createConfetti() {
+                const colors = ['#FFD700', '#FF6347', '#32CD32', '#FF69B4', '#00CED1'];
+                
+                for (let i = 0; i < 50; i++) {
+                    setTimeout(() => {
+                        const confetti = document.createElement('div');
+                        confetti.className = 'confetti';
+                        confetti.style.left = Math.random() * 100 + '%';
+                        confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                        confetti.style.animationDelay = Math.random() * 2 + 's';
+                        
+                        document.getElementById('gameContainer').appendChild(confetti);
+                        
+                        // Remove confetti after animation
+                        setTimeout(() => confetti.remove(), 3000);
+                    }, i * 50);
+                }
+            }
+
+            updateInstructions() {
+                if (!this.isDialogActive) {
+                    const remaining = this.totalPlants - this.plantsPlanted;
+                    if (remaining > 0) {
+                        this.instructionsDiv.textContent = `${remaining} more to plant!`;
+                    } else {
+                        this.instructionsDiv.textContent = 'Watch your plants grow!';
+                    }
+                }
+            }
+
+            playSound(type) {
+                try {
+                    const audio = new Audio(`./assets/sounds/${type}.mp3`);
+                    audio.volume = 0.5;
+                    audio.play().catch(e => console.log('Audio playback failed:', e));
+                } catch (e) {
+                    console.log(`Could not play ${type} sound:`, e);
+                }
+            }
+
+            playTypingSound() {
+                // Subtle typing sound - you can add a typing.mp3 file
+                // For now, using a console beep
+                try {
+                    const audio = new Audio('./assets/sounds/typing.mp3');
+                    audio.volume = 0.1;
+                    audio.play().catch(e => {});
+                } catch (e) {
+                    // Silent fail for typing sound
+                }
+            }
+        }
+
+        // Start the game when page loads
+        window.addEventListener('load', () => {
+            new CongratulationsGame();
+        });
+    </script>
+</body>
+</html>
