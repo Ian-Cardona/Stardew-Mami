@@ -16,8 +16,9 @@ body {
     position: relative;
     width: 100vw;
     height: 100vh;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080"><rect fill="%2387CEEB" width="1920" height="400"/><rect fill="%2398FB98" y="400" width="1920" height="680"/><circle fill="%23FFD700" cx="200" cy="150" r="80"/><path fill="%23228B22" d="M0 600 Q480 550 960 600 T1920 600 V1080 H0 Z"/></svg>') center/cover;
-    /* background: url('assets/images/background.jpg') center/cover; */
+    /* background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080"><rect fill="%2387CEEB" width="1920" height="400"/><rect fill="%2398FB98" y="400" width="1920" height="680"/><circle fill="%23FFD700" cx="200" cy="150" r="80"/><path fill="%23228B22" d="M0 600 Q480 550 960 600 T1920 600 V1080 H0 Z"/></svg>') center/cover; */
+    /* background: url('assets/images/background.png') center/cover; */
+    background: url('assets/backgrounds/background.png') center/cover;
     display: flex;
     flex-direction: column;
     align-items: center;
