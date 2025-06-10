@@ -1,52 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Congratulations Game</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
     <div class="start-screen" id="startScreen">
-        <!-- <h1 class="start-title">🌱 Stardew Mami 🌱</h1> -->
-        <div class="start-title"></div>
-        <p class="start-subtitle">Let's take a look at how the seeds you planted will turn your life around!</p>
-        <button class="start-button" onclick="startGame()">Start Game</button>
+      <!-- <h1 class="start-title">🌱 Stardew Mami 🌱</h1> -->
+      <div class="start-title"></div>
+      <p class="start-subtitle">
+        Let's take a look at how the seeds you planted will turn your life
+        around!
+      </p>
+      <button class="start-button" onclick="startGame()">Start Game</button>
     </div>
 
-    <div class="game-container" id="gameContainer" style="display: none;">
-        <div class="progress-bar">
-            <div class="progress-fill" id="progressFill"></div>
-            <div class="progress-text" id="progressText">0/5 Plants</div>
-        </div>
+    <div class="game-container" id="gameContainer" style="display: none">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+        <div class="progress-text" id="progressText">0/5 Plants</div>
+      </div>
 
-        <div class="game-logo"></div>
+      <div class="game-logo"></div>
 
-        <div class="characters-container">
-            <div class="character nurse" id="nurseCharacter"></div>
-            <div class="character dev" id="devCharacter"></div>
-        </div>
+      <div class="characters-container">
+        <div class="character nurse" id="nurseCharacter"></div>
+        <div class="character dev" id="devCharacter"></div>
+      </div>
 
-        <div class="planting-area" id="plantingArea">
-            <div class="plant-spot" onclick="plantSeed(0)"></div>
-            <div class="plant-spot" onclick="plantSeed(1)"></div>
-            <div class="plant-spot" onclick="plantSeed(2)"></div>
-            <div class="plant-spot" onclick="plantSeed(3)"></div>
-            <div class="plant-spot" onclick="plantSeed(4)"></div>
-        </div>
+      <div class="planting-area" id="plantingArea">
+        <div class="plant-spot" onclick="plantSeed(0)"></div>
+        <div class="plant-spot" onclick="plantSeed(1)"></div>
+        <div class="plant-spot" onclick="plantSeed(2)"></div>
+        <div class="plant-spot" onclick="plantSeed(3)"></div>
+        <div class="plant-spot" onclick="plantSeed(4)"></div>
+      </div>
 
-        <div class="dialog-box" id="dialogBox">
-            <div class="dialog-header" id="dialogHeader">Dev Character</div>
-            <div class="dialog-text" id="dialogText"></div>
-            <button class="dialog-continue" id="continueBtn" onclick="nextDialog()">Continue ▶</button>
-        </div>
+      <div class="dialog-box" id="dialogBox">
+        <div class="dialog-header" id="dialogHeader">Dev Character</div>
+        <div class="dialog-text" id="dialogText"></div>
+        <button class="dialog-continue" id="continueBtn" onclick="nextDialog()">
+          Got it! ▶
+        </button>
+      </div>
 
-        <div class="celebration" id="celebration"></div>
+      <div class="celebration" id="celebration"></div>
     </div>
 
     <script src="script.js"></script>
     <audio id="backgroundMusic" autoplay loop muted playsinline preload="auto">
-        <source src="assets/audio/background-music.wav" type="audio/wav">
+      <source src="assets/audio/background-music.wav" type="audio/wav" />
     </audio>
-</body>
+  </body>
 </html>
