@@ -129,10 +129,6 @@ function showCelebration() {
 function playSound(type) {
   const audio = new Audio(`assets/audio/${type}.wav`);
   audio.play().catch((e) => console.log("Audio play failed:", e));
-
-  if (type === "plant") {
-    console.log("Playing plant sound");
-  }
 }
 
 function initBackgroundMusic() {
