@@ -6,24 +6,27 @@ let backgroundMusic = null;
 const dialogs = [
   {
     speaker: "Ian",
-    text: "Welcome to our little garden, my love! 🌱 Today isn’t just your birthday—it’s a celebration of *you*: the late-night study sessions, the heart you pour into picking yourself up, and the oath you’ll take as an amazing nurse. Plant seeds where the earth calls to you… just like you planted fulfillment in my life the day we met. 🎉",
-    // text: "Welcome!",
+    text: "Welcome to our little garden, my love! 🌱 Today isn’t just your birthday—it’s a celebration of *you*: your late-night study sessions, your unwavering heart, and the promise you’ll soon make as an incredible nurse. Plant seeds wherever you feel called… just as you planted joy in my life the day we met. 🎉",
   },
   {
     speaker: "Ian",
-    text: "Every seed you touch blooms with pride—*my* pride in *you*. The way you care for others, the way you never give up… it’s surgically beautiful. 💉",
+    text: "Every seed you touch blooms with pride—*my* pride in *you*. The way you care for others, your resilience, and your gentle strength… it’s truly inspiring. 💉",
   },
   {
     speaker: "Ian",
-    text: "Look at what you've grown all this time! Each flower is a testament to your strength, your kindness, and the fact that you *somehow* balance patience for patients and my nonsense. The garden shines *because you do*. ✨",
+    text: "I am endlessly amazed and so proud of all you’ve accomplished these past few years. Here’s to many more years together, my lovely! 😚",
   },
   {
     speaker: "Ian",
-    text: "One more step, Nurse. You’ve turned every challenge into a victory—even when life gave you ‘difficult veins,’ you *still* made it work. This garden will always remind me: with you, beautiful things grow. (And yes, I mean the flowers… ) 🌷",
+    text: "Look at what you’ve grown! Each flower is a testament to your strength, your kindness, and your ability to balance caring for patients and putting up with my antics. The garden shines because you do. ✨",
   },
   {
     speaker: "Ian",
-    text: "**YOU DID IT!** 🎉✨ Every petal here dances for *you*—the Nurse who stole my heart long before she’ll steal hospital supplies (kidding… mostly). Happy birthday, my nurse. No oath could ever compare to the honor of loving you. 👩🏼‍⚕️⚕️",
+    text: "One more step, Nurse. You’ve turned every challenge into a victory—even when life gave you ‘difficult veins,’ you made it work. This garden will always remind me: with you, beautiful things grow. (And yes, I mean the flowers… ) 🌷",
+  },
+  {
+    speaker: "Ian",
+    text: "**YOU DID IT!** 🎉✨ Every petal here celebrates *you*—the Nurse who stole my heart long before she’ll steal hospital supplies (kidding… mostly). Happy birthday, my nurse. No oath could ever compare to the honor of loving you. 👩🏼‍⚕️⚕️",
   },
 ];
 
@@ -58,7 +61,7 @@ function plantSeed(spotIndex) {
   if (plantsPlanted === 5) {
     setTimeout(() => {
       showCelebration();
-      currentDialog = 4;
+      currentDialog = 5;
       showDialog();
     }, 1000);
   }
@@ -109,6 +112,8 @@ function nextDialog() {
 }
 
 function showCelebration() {
+  playSound("ending");
+  playSound("fireworks");
   const celebration = document.getElementById("celebration");
 
   for (let i = 0; i < 50; i++) {
