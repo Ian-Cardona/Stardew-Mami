@@ -336,7 +336,7 @@ body {
 
   .planting-area {
     gap: 25px;
-    bottom: 50px;
+    bottom: 120px;
     flex-wrap: wrap;
     justify-content: center;
     max-width: 90vw;
@@ -345,7 +345,6 @@ body {
   .plant-spot {
     width: 60px;
     height: 60px;
-    /* Ensure good touch targets */
     min-width: 50px;
     min-height: 50px;
   }
@@ -423,7 +422,7 @@ body {
 
   .planting-area {
     gap: 20px;
-    bottom: 40px;
+    bottom: 110px;
   }
 
   .plant-spot {
@@ -498,7 +497,7 @@ body {
 
   .planting-area {
     gap: 15px;
-    bottom: 35px;
+    bottom: 100px;
   }
 
   .plant-spot {
